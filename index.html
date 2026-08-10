@@ -11,8 +11,10 @@
         :root {
             --bg: #060a09;
             --surface: #0d1412;
+            --surface-elevated: #111b18;
             --text: #e8f0ee;
             --text-secondary: #5a6b66;
+            --text-tertiary: #3a4a45;
             --accent: #2dd4bf;
             --accent-dim: rgba(45, 212, 191, 0.08);
             --border: rgba(45, 212, 191, 0.12);
@@ -164,16 +166,22 @@
             padding-left: 1.5rem;
         }
 
-        /* Preview */
-        .preview {
+        /* Preview sections */
+        .previews {
             margin-top: 10vh;
+            display: flex;
+            flex-direction: column;
+            gap: 6vh;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
+        }
+
+        .preview {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
         }
 
         .preview-header {
@@ -182,11 +190,24 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
             letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .preview-header .prompt {
             color: var(--accent);
-            margin-right: 0.5rem;
+        }
+
+        .preview-header .file-tag {
+            margin-left: auto;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-tertiary);
+            border: 1px solid var(--border);
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius);
         }
 
         .preview-body {
@@ -211,6 +232,132 @@
 
         .preview-body .string {
             color: #a3e635;
+        }
+
+        .preview-body .comment {
+            color: var(--text-tertiary);
+        }
+
+        .preview-body .keyword {
+            color: #f472b6;
+        }
+
+        /* README Markdown Styling */
+        .readme-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: var(--text);
+        }
+
+        .readme-content h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            line-height: 1.1;
+        }
+
+        .readme-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent);
+            text-transform: lowercase;
+        }
+
+        .readme-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .readme-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .readme-content p strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .readme-content blockquote {
+            border-left: 2px solid var(--accent);
+            margin: 1.25rem 0;
+            padding-left: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .readme-content ul,
+        .readme-content ol {
+            margin: 1rem 0 1rem 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .readme-content li {
+            margin-bottom: 0.35rem;
+        }
+
+        .readme-content li::marker {
+            color: var(--accent);
+        }
+
+        .readme-content code {
+            background: var(--surface-elevated);
+            padding: 0.15rem 0.4rem;
+            border-radius: var(--radius);
+            font-size: 0.82rem;
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        .readme-content pre {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .readme-content pre code {
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: var(--text);
+            font-size: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .readme-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .readme-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .readme-content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        .readme-content > *:first-child {
+            margin-top: 0;
         }
 
         .cursor {
@@ -278,6 +425,12 @@
                 padding-left: 2.5rem;
                 margin-top: 0.2rem;
             }
+            .readme-content h1 {
+                font-size: 1.7rem;
+            }
+            .readme-content h2 {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -308,17 +461,67 @@
             </ul>
         </section>
 
-        <section class="preview" aria-label="File preview">
-            <div class="preview-header">
-                <span class="prompt">$</span> cat .well-known/nostr.json
-            </div>
-            <div class="preview-body">
-                <pre><code><span class="punct">{</span>
+        <section class="previews" aria-label="File previews">
+            <!-- README Preview -->
+            <article class="preview" aria-label="README preview">
+                <div class="preview-header">
+                    <span class="prompt">$</span> cat README.md
+                    <span class="file-tag">markdown</span>
+                </div>
+                <div class="preview-body">
+                    <div class="readme-content">
+                        <h1>switcharooz</h1>
+                        <blockquote>a minimal nostr identity hub hosted on github pages</blockquote>
+
+                        <h2>what is this?</h2>
+                        <p>this repository serves as a lightweight, self-hosted identity layer for the <strong>nostr protocol</strong>. it hosts the <code>.well-known/nostr.json</code> file required for <a href="https://github.com/nostr-protocol/nips/blob/master/05.md">nip-05</a> identifier verification, mapping a human-readable name to a public key.</p>
+
+                        <h2>structure</h2>
+                        <pre><code>.
+├── README.md
+└── .well-known/
+    └── nostr.json</code></pre>
+
+                        <h2>nostr.json</h2>
+                        <pre><code>{
+  "names": {
+    "spherum": "48ca053916454f5d6171da28b677ce9a4922e672fb0e5707d1bb69bf1d4b2dff"
+  }
+}</code></pre>
+
+                        <h2>verification</h2>
+                        <p>nip-05 clients can verify the identifier <code>spherum@switcharooz.github.io</code> by fetching:</p>
+                        <pre><code>https://switcharooz.github.io/.well-known/nostr.json</code></pre>
+
+                        <h2>philosophy</h2>
+                        <ul>
+                            <li>no frameworks</li>
+                            <li>no tracking</li>
+                            <li>no bloat</li>
+                            <li>hand-crafted markup and styling</li>
+                            <li>generated by hand, served by github</li>
+                        </ul>
+
+                        <hr>
+                        <p><em>generated by hand // no frameworks // no tracking</em></p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Nostr JSON Preview -->
+            <article class="preview" aria-label="File preview">
+                <div class="preview-header">
+                    <span class="prompt">$</span> cat .well-known/nostr.json
+                    <span class="file-tag">json</span>
+                </div>
+                <div class="preview-body">
+                    <pre><code><span class="punct">{</span>
   <span class="key">"names"</span><span class="punct">: {</span>
     <span class="key">"spherum"</span><span class="punct">: </span><span class="string">"<span class="scramble" data-value="48ca053916454f5d6171da28b677ce9a4922e672fb0e5707d1bb69bf1d4b2dff">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>"</span>
   <span class="punct">}</span>
 <span class="punct">}</span><span class="cursor"></span></code></pre>
-            </div>
+                </div>
+            </article>
         </section>
 
         <footer>
